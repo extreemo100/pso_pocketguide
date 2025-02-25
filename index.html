@@ -15,14 +15,28 @@
             background: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
+            font-size: 16px;
         }
         #animation-selector button {
             display: block;
             margin: 5px 0;
+            font-size: 14px;
         }
         #animation-info {
             margin-bottom: 10px;
             font-weight: bold;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            #animation-selector {
+                font-size: 14px;
+                padding: 8px;
+            }
+            #animation-selector button {
+                font-size: 12px;
+                padding: 5px;
+            }
         }
     </style>
 </head>
@@ -129,6 +143,9 @@
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
             directionalLight.position.set(1, 1, 1);
             scene.add(directionalLight);
+
+            // Handle window resizing
+            window.addEventListener('resize', onWindowResize);
         }
 
         function playAnimation(index) {
@@ -152,11 +169,12 @@
             renderer.render(scene, camera); // Render the scene
         }
 
-        window.addEventListener('resize', () => {
+        function onWindowResize() {
+            // Update camera aspect ratio and renderer size
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        }
     </script>
 </body>
 </html>
