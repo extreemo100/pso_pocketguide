@@ -121,7 +121,14 @@
                 // Update UI with total animations
                 document.getElementById('total-animations').textContent = animations.length;
 
-                // Play the first animation by default
+                // Check for URL parameter to set the initial animation
+                const urlParams = new URLSearchParams(window.location.search);
+                const animationParam = urlParams.get('animation');
+                if (animationParam === '6' && animations.length > 5) {
+                    currentAnimationIndex = 5; // 6th animation (index 5)
+                }
+
+                // Play the initial animation
                 if (animations.length > 0) {
                     playAnimation(currentAnimationIndex);
                 }
