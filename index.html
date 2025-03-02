@@ -10,36 +10,19 @@
         #animation-selector {
             position: absolute;
             top: 10px;
-            left: 350px;
+            left: 10px;
             z-index: 1;
             background: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
-            font-size: 16px;
-            transform: rotate(90deg); /* Rotate 90 degrees clockwise */
-            transform-origin: top left; /* Set the rotation origin */
-            white-space: nowrap; /* Prevent text from wrapping */
         }
         #animation-selector button {
             display: block;
             margin: 5px 0;
-            font-size: 14px;
         }
         #animation-info {
             margin-bottom: 10px;
             font-weight: bold;
-        }
-
-        /* Mobile responsiveness */
-        @media (max-width: 600px) {
-            #animation-selector {
-                font-size: 14px;
-                padding: 8px;
-            }
-            #animation-selector button {
-                font-size: 12px;
-                padding: 5px;
-            }
         }
     </style>
 </head>
@@ -74,6 +57,11 @@
             // Scene
             scene = new THREE.Scene();
 
+            // Load background image
+            const textureLoader = new THREE.TextureLoader();
+            const backgroundTexture = textureLoader.load('Screenshot (90).png'); // Replace with your image URL
+            scene.background = backgroundTexture;
+
             // Camera
             camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 0, 90); // Position the camera above the model
@@ -94,7 +82,7 @@
             controls.enablePan = true; // Allow panning
             controls.enableZoom = true; // Allow zooming
             controls.minDistance = 0.5; // Minimum zoom distance
-            controls.maxDistance = 2; // Maximum zoom distance
+            controls.maxDistance = 2.5; // Maximum zoom distance
             controls.maxPolarAngle = 0; // Restrict camera to top-down view
             controls.minPolarAngle = 0; // Restrict camera to top-down view
 
@@ -108,7 +96,7 @@
 
                 // Rotate the model 90 degrees counterclockwise along the Z-axis
                 model.rotation.z = 0; // 90 degrees in radians
-                model.rotation.y = 0; 
+                model.rotation.y = Math.PI / 2; 
 
                 scene.add(model);
 
@@ -121,14 +109,7 @@
                 // Update UI with total animations
                 document.getElementById('total-animations').textContent = animations.length;
 
-                // Check for URL parameter to set the initial animation
-                const urlParams = new URLSearchParams(window.location.search);
-                const animationParam = urlParams.get('animation');
-                if (animationParam === '6' && animations.length > 5) {
-                    currentAnimationIndex = 5; // 6th animation (index 5)
-                }
-
-                // Play the initial animation
+                // Play the first animation by default
                 if (animations.length > 0) {
                     playAnimation(currentAnimationIndex);
                 }
@@ -153,9 +134,6 @@
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
             directionalLight.position.set(1, 1, 1);
             scene.add(directionalLight);
-
-            // Handle window resizing
-            window.addEventListener('resize', onWindowResize);
         }
 
         function playAnimation(index) {
@@ -179,12 +157,11 @@
             renderer.render(scene, camera); // Render the scene
         }
 
-        function onWindowResize() {
-            // Update camera aspect ratio and renderer size
+        window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        }
+        });
     </script>
 </body>
 </html>
