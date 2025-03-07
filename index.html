@@ -204,7 +204,7 @@
                         document.getElementById('next-button').disabled = false;
                         document.getElementById('prev-button').disabled = false;
                         resolve(); // Resolve the promise after freezing
-                    }, -1000); // Freeze for 0.5 seconds
+                    }, 0); // Freeze for 0.5 seconds
                 }, animationDuration * 1000); // Wait for the animation to finish
             });
         }
