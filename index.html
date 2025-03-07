@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLTF Animation Viewer (Top-Down)</title>
+    <title>Book Navigator with GLTF Animations (Top-Down View)</title>
     <style>
         body { margin: 0; }
         canvas { display: block; }
@@ -24,11 +24,15 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
+        #animation-selector button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
     <div id="animation-selector">
-        <div id="animation-info">Animation: <span id="current-animation-name">None</span> (<span id="current-animation-index">0</span>/<span id="total-animations">0</span>)</div>
+        <div id="animation-info">Action: <span id="current-action-name">None</span> (<span id="current-action-index">0</span>/13)</div>
         <button id="prev-button">Previous</button>
         <button id="next-button">Next</button>
     </div>
@@ -48,7 +52,11 @@
         let scene, camera, renderer, mixer, clock, controls;
         const animations = [];
         let currentAnimationAction = null;
-        let currentAnimationIndex = 0;
+        let currentPage = 0; // Current pose (0-4)
+        const totalPoses = 5; // Poses 0-4
+        const totalNextFlips = 4; // Next flips 5-8
+        const totalPreviousFlips = 4; // Previous flips 9-12
+        let isAnimating = false; // Track if an animation is in progress
 
         init();
         animate();
@@ -57,12 +65,7 @@
             // Scene
             scene = new THREE.Scene();
 
-            // Load background image
-            const textureLoader = new THREE.TextureLoader();
-            const backgroundTexture = textureLoader.load('Screenshot (90).png'); // Replace with your image URL
-            scene.background = backgroundTexture;
-
-            // Camera
+            // Camera (Top-Down View)
             camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 0, 90); // Position the camera above the model
             camera.lookAt(0, 90, 0); // Make the camera look at the center of the scene
@@ -76,13 +79,13 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // Controls
+            // Controls (Restrict to top-down view)
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableRotate = false; // Disable rotation
             controls.enablePan = true; // Allow panning
             controls.enableZoom = true; // Allow zooming
             controls.minDistance = 0.5; // Minimum zoom distance
-            controls.maxDistance = 2.5; // Maximum zoom distance
+            controls.maxDistance = 4.5; // Maximum zoom distance
             controls.maxPolarAngle = 0; // Restrict camera to top-down view
             controls.minPolarAngle = 0; // Restrict camera to top-down view
 
@@ -91,12 +94,12 @@
 
             // Load GLB model
             const loader = new GLTFLoader();
-            loader.load('sixteen_bones_with_pages_linked_sixteententh_action_done.glb', function(gltf) {
+            loader.load('book_five_pages_done_2.glb', function(gltf) {
                 const model = gltf.scene;
 
                 // Rotate the model 90 degrees counterclockwise along the Z-axis
                 model.rotation.z = 0; // 90 degrees in radians
-                model.rotation.y = 0; 
+                model.rotation.y = -Math.PI/2; 
 
                 scene.add(model);
 
@@ -106,24 +109,8 @@
                     animations.push(clip); // Store the animation clip
                 });
 
-                // Update UI with total animations
-                document.getElementById('total-animations').textContent = animations.length;
-
-                // Play the first animation by default
-                if (animations.length > 0) {
-                    playAnimation(currentAnimationIndex);
-                }
-
-                // Add event listeners for Next and Previous buttons
-                document.getElementById('next-button').addEventListener('click', () => {
-                    currentAnimationIndex = (currentAnimationIndex + 1) % animations.length;
-                    playAnimation(currentAnimationIndex);
-                });
-
-                document.getElementById('prev-button').addEventListener('click', () => {
-                    currentAnimationIndex = (currentAnimationIndex - 1 + animations.length) % animations.length;
-                    playAnimation(currentAnimationIndex);
-                });
+                // Play the initial pose (Animation 0)
+                playAnimation(currentPage);
             });
 
             // Lights
@@ -134,6 +121,10 @@
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
             directionalLight.position.set(1, 1, 1);
             scene.add(directionalLight);
+
+            // Add event listeners for Next and Previous buttons
+            document.getElementById('next-button').addEventListener('click', handleNext);
+            document.getElementById('prev-button').addEventListener('click', handlePrevious);
         }
 
         function playAnimation(index) {
@@ -144,9 +135,50 @@
             currentAnimationAction = mixer.clipAction(clip); // Create a new action
             currentAnimationAction.reset().play(); // Play the animation
 
-            // Update UI with current animation name and index
-            document.getElementById('current-animation-name').textContent = clip.name || `Animation ${index + 1}`;
-            document.getElementById('current-animation-index').textContent = index + 1;
+            // Update UI with current action name and index
+            document.getElementById('current-action-name').textContent = clip.name || `Action ${index}`;
+            document.getElementById('current-action-index').textContent = index;
+
+            // Disable buttons while animating
+            isAnimating = true;
+            document.getElementById('next-button').disabled = true;
+            document.getElementById('prev-button').disabled = true;
+
+            // Check if the animation has completed
+            const animationDuration = clip.duration;
+            setTimeout(() => {
+                isAnimating = false;
+                document.getElementById('next-button').disabled = false;
+                document.getElementById('prev-button').disabled = false;
+            }, animationDuration * 1000); // Convert duration to milliseconds
+        }
+
+        function handleNext() {
+            if (!isAnimating && currentPage < totalPoses - 1) {
+                // Play the next flip animation
+                const nextFlipIndex = totalPoses + currentPage; // Next flips start at index 5
+                playAnimation(nextFlipIndex);
+
+                // After the flip, play the next pose
+                setTimeout(() => {
+                    currentPage++;
+                    playAnimation(currentPage);
+                }, animations[nextFlipIndex].duration * 1000); // Wait for the flip animation to finish
+            }
+        }
+
+        function handlePrevious() {
+            if (!isAnimating && currentPage > 0) {
+                // Play the previous flip animation
+                const previousFlipIndex = totalPoses + totalNextFlips + (currentPage - 1); // Previous flips start at index 9
+                playAnimation(previousFlipIndex);
+
+                // After the flip, play the previous pose
+                setTimeout(() => {
+                    currentPage--;
+                    playAnimation(currentPage);
+                }, animations[previousFlipIndex].duration * 1000); // Wait for the flip animation to finish
+            }
         }
 
         function animate() {
