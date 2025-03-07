@@ -99,7 +99,7 @@
 
                 // Rotate the model 90 degrees counterclockwise along the Z-axis
                 model.rotation.z = 0; // 90 degrees in radians
-                model.rotation.y = -Math.PI/2; 
+                model.rotation.y = -Math.PI / 2;
 
                 scene.add(model);
 
@@ -144,7 +144,7 @@
             document.getElementById('next-button').disabled = true;
             document.getElementById('prev-button').disabled = true;
 
-            // Check if the animation has completed
+            // Wait for the animation to finish
             const animationDuration = clip.duration;
             setTimeout(() => {
                 isAnimating = false;
@@ -153,32 +153,57 @@
             }, animationDuration * 1000); // Convert duration to milliseconds
         }
 
-        function handleNext() {
+        async function handleNext() {
             if (!isAnimating && currentPage < totalPoses - 1) {
                 // Play the next flip animation
                 const nextFlipIndex = totalPoses + currentPage; // Next flips start at index 5
-                playAnimation(nextFlipIndex);
+                await playAnimationAndWait(nextFlipIndex); // Wait for the flip animation to finish
 
-                // After the flip, play the next pose
-                setTimeout(() => {
-                    currentPage++;
-                    playAnimation(currentPage);
-                }, animations[nextFlipIndex].duration * 1000); // Wait for the flip animation to finish
+                // Play the next pose
+                currentPage++;
+                playAnimation(currentPage);
             }
         }
 
-        function handlePrevious() {
+        async function handlePrevious() {
             if (!isAnimating && currentPage > 0) {
                 // Play the previous flip animation
                 const previousFlipIndex = totalPoses + totalNextFlips + (currentPage - 1); // Previous flips start at index 9
-                playAnimation(previousFlipIndex);
+                await playAnimationAndWait(previousFlipIndex); // Wait for the flip animation to finish
 
-                // After the flip, play the previous pose
-                setTimeout(() => {
-                    currentPage--;
-                    playAnimation(currentPage);
-                }, animations[previousFlipIndex].duration * 1000); // Wait for the flip animation to finish
+                // Play the previous pose
+                currentPage--;
+                playAnimation(currentPage);
             }
+        }
+
+        function playAnimationAndWait(index) {
+            return new Promise((resolve) => {
+                if (currentAnimationAction) {
+                    currentAnimationAction.stop(); // Stop the current animation
+                }
+                const clip = animations[index]; // Get the animation clip
+                currentAnimationAction = mixer.clipAction(clip); // Create a new action
+                currentAnimationAction.reset().play(); // Play the animation
+
+                // Update UI with current action name and index
+                document.getElementById('current-action-name').textContent = clip.name || `Action ${index}`;
+                document.getElementById('current-action-index').textContent = index;
+
+                // Disable buttons while animating
+                isAnimating = true;
+                document.getElementById('next-button').disabled = true;
+                document.getElementById('prev-button').disabled = true;
+
+                // Wait for the animation to finish
+                const animationDuration = clip.duration;
+                setTimeout(() => {
+                    isAnimating = false;
+                    document.getElementById('next-button').disabled = false;
+                    document.getElementById('prev-button').disabled = false;
+                    resolve(); // Resolve the promise when the animation finishes
+                }, animationDuration * 1000); // Convert duration to milliseconds
+            });
         }
 
         function animate() {
