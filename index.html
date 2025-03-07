@@ -157,7 +157,7 @@
             if (!isAnimating && currentPage < totalPoses - 1) {
                 // Play the next flip animation
                 const nextFlipIndex = totalPoses + currentPage; // Next flips start at index 5
-                await playAnimationAndWait(nextFlipIndex); // Wait for the flip animation to finish
+                await playAnimationAndFreeze(nextFlipIndex); // Wait for the flip animation to finish and freeze
 
                 // Play the next pose
                 currentPage++;
@@ -169,7 +169,7 @@
             if (!isAnimating && currentPage > 0) {
                 // Play the previous flip animation
                 const previousFlipIndex = totalPoses + totalNextFlips + (currentPage - 1); // Previous flips start at index 9
-                await playAnimationAndWait(previousFlipIndex); // Wait for the flip animation to finish
+                await playAnimationAndFreeze(previousFlipIndex); // Wait for the flip animation to finish and freeze
 
                 // Play the previous pose
                 currentPage--;
@@ -177,7 +177,7 @@
             }
         }
 
-        function playAnimationAndWait(index) {
+        function playAnimationAndFreeze(index) {
             return new Promise((resolve) => {
                 if (currentAnimationAction) {
                     currentAnimationAction.stop(); // Stop the current animation
@@ -198,11 +198,14 @@
                 // Wait for the animation to finish
                 const animationDuration = clip.duration;
                 setTimeout(() => {
-                    isAnimating = false;
-                    document.getElementById('next-button').disabled = false;
-                    document.getElementById('prev-button').disabled = false;
-                    resolve(); // Resolve the promise when the animation finishes
-                }, animationDuration * 1000); // Convert duration to milliseconds
+                    // Freeze the last frame for 0.5 seconds
+                    setTimeout(() => {
+                        isAnimating = false;
+                        document.getElementById('next-button').disabled = false;
+                        document.getElementById('prev-button').disabled = false;
+                        resolve(); // Resolve the promise after freezing
+                    }, -1000); // Freeze for 0.5 seconds
+                }, animationDuration * 1000); // Wait for the animation to finish
             });
         }
 
