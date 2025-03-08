@@ -133,6 +133,8 @@
             }
             const clip = animations[index]; // Get the animation clip
             currentAnimationAction = mixer.clipAction(clip); // Create a new action
+            currentAnimationAction.setLoop(THREE.LoopOnce, 1); // Play the animation once
+            currentAnimationAction.clampWhenFinished = true; // Keep the final state of the animation
             currentAnimationAction.reset().play(); // Play the animation
 
             // Update UI with current action name and index
