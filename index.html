@@ -22,11 +22,12 @@
         }
         #button-container {
             position: absolute;
-            bottom: 10px;
-            left: 50%;
+            bottom: 215px;
+            left: 38%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            flex-direction: column; /* Stack buttons vertically */
+            gap: 10px; /* Reduce gap between buttons */
             z-index: 1;
         }
         #button-container button {
@@ -34,6 +35,7 @@
             border: none;
             cursor: pointer;
             padding: 0;
+            transform: rotate(90deg); /* Rotate buttons by 90 degrees */
         }
         #button-container button img {
             width: 250px; /* Adjust the size of the images */
@@ -45,19 +47,22 @@
         }
         #custom-buttons {
             position: absolute;
-            top: 50%;
-            right: 420px;
-            transform: translateY(-50%);
+            top: 80%;
+            right: 530px;
+            transform: translateX(-50%);
             display: flex;
-            flex-direction: column;
-            gap: 5px;
+            flex-direction: row;
             z-index: 1;
+            padding: 0;
+            
         }
         #custom-buttons button {
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
+            margin-right: -150px;
+            transform: rotate(90deg); /* Rotate buttons by 90 degrees */
         }
         #custom-buttons button img {
             width: 250px; /* Adjust the size of the images */
@@ -79,13 +84,13 @@
     </div>
     <div id="custom-buttons">
         <button id="custom-button-1">
-            <img src="Button Design-07.png" alt="Custom Button 1"> <!-- Replace with your image path -->
+            <img src="Button Design-09.png" alt="Custom Button 1"> <!-- Replace with your image path -->
         </button>
         <button id="custom-button-2">
             <img src="Button Design-08.png" alt="Custom Button 2"> <!-- Replace with your image path -->
         </button>
         <button id="custom-button-3">
-            <img src="Button Design-09.png" alt="Custom Button 3"> <!-- Replace with your image path -->
+            <img src="Button Design-07.png" alt="Custom Button 3"> <!-- Replace with your image path -->
         </button>
     </div>
     <script type="importmap">
