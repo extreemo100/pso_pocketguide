@@ -16,25 +16,77 @@
             padding: 10px;
             border-radius: 5px;
         }
-        #animation-selector button {
-            display: block;
-            margin: 5px 0;
-        }
         #animation-info {
             margin-bottom: 10px;
             font-weight: bold;
         }
-        #animation-selector button:disabled {
-            background-color: #ccc;
+        #button-container {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+        }
+        #button-container button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        #button-container button img {
+            width: 250px; /* Adjust the size of the images */
+            height: 125px;
+        }
+        #button-container button:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
+        }
+        #custom-buttons {
+            position: absolute;
+            top: 50%;
+            right: 420px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1;
+        }
+        #custom-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        #custom-buttons button img {
+            width: 250px; /* Adjust the size of the images */
+            height: 125px;
         }
     </style>
 </head>
 <body>
     <div id="animation-selector">
         <div id="animation-info">Action: <span id="current-action-name">None</span> (<span id="current-action-index">0</span>/13)</div>
-        <button id="prev-button">Previous</button>
-        <button id="next-button">Next</button>
+    </div>
+    <div id="button-container">
+        <button id="prev-button">
+            <img src="Button Design-10.png" alt="Previous"> <!-- Replace with your image path -->
+        </button>
+        <button id="next-button">
+            <img src="Button Design-11.png" alt="Next"> <!-- Replace with your image path -->
+        </button>
+    </div>
+    <div id="custom-buttons">
+        <button id="custom-button-1">
+            <img src="Button Design-07.png" alt="Custom Button 1"> <!-- Replace with your image path -->
+        </button>
+        <button id="custom-button-2">
+            <img src="Button Design-08.png" alt="Custom Button 2"> <!-- Replace with your image path -->
+        </button>
+        <button id="custom-button-3">
+            <img src="Button Design-09.png" alt="Custom Button 3"> <!-- Replace with your image path -->
+        </button>
     </div>
     <script type="importmap">
         {
@@ -125,6 +177,17 @@
             // Add event listeners for Next and Previous buttons
             document.getElementById('next-button').addEventListener('click', handleNext);
             document.getElementById('prev-button').addEventListener('click', handlePrevious);
+
+            // Add event listeners for custom buttons
+            document.getElementById('custom-button-1').addEventListener('click', () => {
+                window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder'; // Replace with your link
+            });
+            document.getElementById('custom-button-2').addEventListener('click', () => {
+                window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder'; // Replace with your link
+            });
+            document.getElementById('custom-button-3').addEventListener('click', () => {
+                window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder'; // Replace with your link
+            });
         }
 
         function playAnimation(index) {
