@@ -53,9 +53,9 @@
         const animations = [];
         let currentAnimationAction = null;
         let currentPage = 0; // Current pose (0-4)
-        const totalPoses = 5; // Poses 0-4
-        const totalNextFlips = 4; // Next flips 5-8
-        const totalPreviousFlips = 4; // Previous flips 9-12
+        const totalPoses = 17; // Poses 0-4
+        const totalNextFlips = 16; // Next flips 5-8
+        const totalPreviousFlips = 16; // Previous flips 9-12
         let isAnimating = false; // Track if an animation is in progress
 
         init();
@@ -94,12 +94,12 @@
 
             // Load GLB model
             const loader = new GLTFLoader();
-            loader.load('first_is_last.glb', function(gltf) {
+            loader.load('book.glb', function(gltf) {
                 const model = gltf.scene;
 
                 // Rotate the model 90 degrees counterclockwise along the Z-axis
                 model.rotation.z = 0; // 90 degrees in radians
-                model.rotation.y = -Math.PI / 2;
+                model.rotation.y = -Math.PI/2; 
 
                 scene.add(model);
 
@@ -144,7 +144,7 @@
             document.getElementById('next-button').disabled = true;
             document.getElementById('prev-button').disabled = true;
 
-            // Wait for the animation to finish
+            // Check if the animation has completed
             const animationDuration = clip.duration;
             setTimeout(() => {
                 isAnimating = false;
@@ -153,60 +153,32 @@
             }, animationDuration * 1000); // Convert duration to milliseconds
         }
 
-        async function handleNext() {
+        function handleNext() {
             if (!isAnimating && currentPage < totalPoses - 1) {
                 // Play the next flip animation
                 const nextFlipIndex = totalPoses + currentPage; // Next flips start at index 5
-                await playAnimationAndFreeze(nextFlipIndex); // Wait for the flip animation to finish and freeze
+                playAnimation(nextFlipIndex);
 
-                // Play the next pose
-                currentPage++;
-                playAnimation(currentPage);
+                // After the flip, play the next pose
+                setTimeout(() => {
+                    currentPage++;
+                    playAnimation(currentPage);
+                }, animations[nextFlipIndex].duration * 1000); // Wait for the flip animation to finish
             }
         }
 
-        async function handlePrevious() {
+        function handlePrevious() {
             if (!isAnimating && currentPage > 0) {
                 // Play the previous flip animation
                 const previousFlipIndex = totalPoses + totalNextFlips + (currentPage - 1); // Previous flips start at index 9
-                await playAnimationAndFreeze(previousFlipIndex); // Wait for the flip animation to finish and freeze
+                playAnimation(previousFlipIndex);
 
-                // Play the previous pose
-                currentPage--;
-                playAnimation(currentPage);
-            }
-        }
-
-        function playAnimationAndFreeze(index) {
-            return new Promise((resolve) => {
-                if (currentAnimationAction) {
-                    currentAnimationAction.stop(); // Stop the current animation
-                }
-                const clip = animations[index]; // Get the animation clip
-                currentAnimationAction = mixer.clipAction(clip); // Create a new action
-                currentAnimationAction.reset().play(); // Play the animation
-
-                // Update UI with current action name and index
-                document.getElementById('current-action-name').textContent = clip.name || `Action ${index}`;
-                document.getElementById('current-action-index').textContent = index;
-
-                // Disable buttons while animating
-                isAnimating = true;
-                document.getElementById('next-button').disabled = true;
-                document.getElementById('prev-button').disabled = true;
-
-                // Wait for the animation to finish
-                const animationDuration = clip.duration;
+                // After the flip, play the previous pose
                 setTimeout(() => {
-                    // Freeze the last frame for 0.5 seconds
-                    setTimeout(() => {
-                        isAnimating = false;
-                        document.getElementById('next-button').disabled = false;
-                        document.getElementById('prev-button').disabled = false;
-                        resolve(); // Resolve the promise after freezing
-                    }, 0); // Freeze for 0.5 seconds
-                }, animationDuration * 1000); // Wait for the animation to finish
-            });
+                    currentPage--;
+                    playAnimation(currentPage);
+                }, animations[previousFlipIndex].duration * 1000); // Wait for the flip animation to finish
+            }
         }
 
         function animate() {
