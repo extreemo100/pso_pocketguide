@@ -166,17 +166,14 @@
                     animations.push(clip); // Store the animation clip
                 });
 
-                // Update UI with total animations
-                document.getElementById('total-animations').textContent = animations.length;
-
                 // Check for URL parameter to set the initial animation
                 const urlParams = new URLSearchParams(window.location.search);
                 const animationParam = urlParams.get('animation');
                 if (animationParam === '6' && animations.length > 5) {
-                    currentAnimationIndex = 5; // 6th animation (index 5)
+                    currentPage = 5; // Set the current page to the 6th animation (index 5)
                 }
 
-                // Play the initial pose (Animation 0)
+                // Play the initial animation
                 playAnimation(currentPage);
             });
 
