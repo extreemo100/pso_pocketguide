@@ -169,8 +169,11 @@
                 // Check for URL parameter to set the initial animation
                 const urlParams = new URLSearchParams(window.location.search);
                 const animationParam = urlParams.get('animation');
-                if (animationParam === '6' && animations.length > 5) {
-                    currentPage = 5; // Set the current page to the 6th animation (index 5)
+                if (animationParam) {
+                    const animationIndex = getAnimationIndexFromParam(animationParam);
+                    if (animationIndex !== null && animations.length > animationIndex) {
+                        currentPage = animationIndex; // Set the current page to the specified animation
+                    }
                 }
 
                 // Play the initial animation
@@ -200,6 +203,19 @@
             document.getElementById('custom-button-3').addEventListener('click', () => {
                 window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder'; // Replace with your link
             });
+        }
+
+        function getAnimationIndexFromParam(param) {
+            // Map URL parameter values to animation indices
+            switch (param) {
+                case '5': return 4; // 5th animation (index 4)
+                case '6': return 5; // 6th animation (index 5)
+                case '8': return 7; // 8th animation (index 7)
+                case '9': return 8; // 9th animation (index 8)
+                case '10': return 9; // 10th animation (index 9)
+                case '12': return 11; // 12th animation (index 11)
+                default: return null; // Invalid parameter
+            }
         }
 
         function playAnimation(index) {
