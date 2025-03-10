@@ -115,6 +115,16 @@
         const totalPreviousFlips = 16; // Previous flips 9-12
         let isAnimating = false; // Track if an animation is in progress
 
+        // Background image mapping
+        const backgroundImages = {
+            '5': 'background1.jpg', // Replace with your image path
+            '6': 'background2.jpg', // Replace with your image path
+            '8': 'background3.jpg', // Replace with your image path
+            '9': 'background4.jpg', // Replace with your image path
+            '10': 'background5.jpg', // Replace with your image path
+            '12': 'background6.jpg', // Replace with your image path
+        };
+
         init();
         animate();
 
@@ -166,13 +176,19 @@
                     animations.push(clip); // Store the animation clip
                 });
 
-                // Check for URL parameter to set the initial animation
+                // Check for URL parameter to set the initial animation and background
                 const urlParams = new URLSearchParams(window.location.search);
                 const animationParam = urlParams.get('animation');
                 if (animationParam) {
                     const animationIndex = getAnimationIndexFromParam(animationParam);
                     if (animationIndex !== null && animations.length > animationIndex) {
                         currentPage = animationIndex; // Set the current page to the specified animation
+                    }
+
+                    // Set the background based on the URL parameter
+                    const backgroundImage = backgroundImages[animationParam];
+                    if (backgroundImage) {
+                        setBackground(backgroundImage);
                     }
                 }
 
@@ -216,6 +232,13 @@
                 case '12': return 11; // 12th animation (index 11)
                 default: return null; // Invalid parameter
             }
+        }
+
+        function setBackground(imagePath) {
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load(imagePath, (texture) => {
+                scene.background = texture; // Set the background texture
+            });
         }
 
         function playAnimation(index) {
