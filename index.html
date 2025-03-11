@@ -27,7 +27,7 @@
             transform: translateX(-50%);
             display: flex;
             flex-direction: column; /* Stack buttons vertically */
-            gap: 10px; /* Reduce gap between buttons */
+            gap: 100px; /* Reduce gap between buttons */
             z-index: 1;
         }
         #button-container button {
@@ -38,8 +38,8 @@
             transform: rotate(90deg); /* Rotate buttons by 90 degrees */
         }
         #button-container button img {
-            width: 250px; /* Adjust the size of the images */
-            height: 125px;
+            width: 150px; /* Adjust the size of the images */
+            height: 75px;
         }
         #button-container button:disabled {
             opacity: 0.5;
@@ -47,8 +47,8 @@
         }
         #custom-buttons {
             position: absolute;
-            top: 80%;
-            right: 530px;
+            top: 85%;
+            right: 480px;
             transform: translateX(-50%);
             display: flex;
             flex-direction: row;
@@ -61,12 +61,12 @@
             border: none;
             cursor: pointer;
             padding: 0;
-            margin-right: -150px;
+            margin-right: -50px;
             transform: rotate(90deg); /* Rotate buttons by 90 degrees */
         }
         #custom-buttons button img {
-            width: 250px; /* Adjust the size of the images */
-            height: 125px;
+            width: 150px; /* Adjust the size of the images */
+            height: 75px;
         }
     </style>
 </head>
@@ -220,13 +220,13 @@
 
             // Add event listeners for custom buttons
             document.getElementById('custom-button-1').addEventListener('click', () => {
-                window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder'; // Replace with your link
+                window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder/'; // Replace with your link
             });
             document.getElementById('custom-button-2').addEventListener('click', () => {
-                window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder'; // Replace with your link
+                window.location.href = 'https://psopk.com/en/lubricants'; // Replace with your link
             });
             document.getElementById('custom-button-3').addEventListener('click', () => {
-                window.location.href = 'https://psopk.com/en/lubricants/lubricant-finder'; // Replace with your link
+                window.location.href = 'https://psopk.com/'; // Replace with your link
             });
         }
 
