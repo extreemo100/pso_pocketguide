@@ -126,7 +126,7 @@
                 model.rotation.y = -Math.PI/2; 
 
                 model.position.x = 0.2; 
-                model.position.y = -0.3; 
+                model.position.y = -0.4; 
 
                 scene.add(model);
 
@@ -195,7 +195,7 @@
             // Load Custom Link Button 1 GLB
             loader.load('web_page.glb', function(gltf) {
                 linkButton1 = gltf.scene;
-                linkButton1.position.set(0.9, 0, 2); // Position to the left side
+                linkButton1.position.set(0.9, 0, 1.6); // Position to the left side
                 linkButton1.rotation.z = Math.PI/2; // Rotate to match the previous orientation
                 linkButton1.rotation.y = Math.PI;
                 linkButton1.scale.set(15, 15, 15); // Scale appropriately
@@ -211,7 +211,7 @@
             // Load Custom Link Button 2 GLB
             loader.load('more_information.glb', function(gltf) {
                 linkButton2 = gltf.scene;
-                linkButton2.position.set(0.2, 0, 2); // Position to the left side
+                linkButton2.position.set(0.2, 0, 1.6); // Position to the left side
                 linkButton2.rotation.z = Math.PI/2; // Rotate to match the previous orientation
                 linkButton2.rotation.y = Math.PI;
                 linkButton2.scale.set(15, 15, 15); // Scale appropriately
@@ -227,7 +227,7 @@
             // Load Custom Link Button 3 GLB
             loader.load('vehicle_selection.glb', function(gltf) {
                 linkButton3 = gltf.scene;
-                linkButton3.position.set(-0.5, 0, 2); // Position to the left side
+                linkButton3.position.set(-0.5, 0, 1.6); // Position to the left side
                 linkButton3.rotation.z = Math.PI/2; // Rotate to match the previous orientation
                 linkButton3.rotation.y = Math.PI;
                 linkButton3.scale.set(15, 15, 15); // Scale appropriately
