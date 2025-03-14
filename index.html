@@ -165,7 +165,7 @@
             // Load Next Button GLB
             loader.load('nextbutton.glb', function(gltf) {
                 nextButton = gltf.scene;
-                nextButton.position.set(-1.15,0, 0.8); // Position to the right side
+                nextButton.position.set(-1.15,0, 0.4); // Position to the right side
                 nextButton.rotation.y = Math.PI;
                 nextButton.rotation.z = Math.PI/2; // Rotate to match the previous orientation
                 nextButton.scale.set(0.1, 0.1, 1); // Scale appropriately
@@ -180,7 +180,7 @@
             // Load Previous Button GLB
             loader.load('backbutton.glb', function(gltf) {
                 prevButton = gltf.scene;
-                prevButton.position.set(-1.15, 0, -0.8); // Position to the right side
+                prevButton.position.set(-1.15, 0, -1.2); // Position to the right side
                 prevButton.rotation.y = Math.PI;
                 prevButton.rotation.z = Math.PI/2;
                 prevButton.scale.set(1, 1, 1); // Scale appropriately
